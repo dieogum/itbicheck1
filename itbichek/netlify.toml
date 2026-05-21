@@ -1,0 +1,96 @@
+# ============================================================
+# netlify.toml — ITBI Check
+# Configurações de build, redirecionamentos e headers de segurança
+# ============================================================
+
+[build]
+  publish = "."
+
+# ------------------------------------------------------------
+# Redirecionamentos: força HTTPS e www → apex
+# ------------------------------------------------------------
+
+[[redirects]]
+  from = "http://itbicheck.app/*"
+  to   = "https://itbicheck.app/:splat"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from = "http://www.itbicheck.app/*"
+  to   = "https://itbicheck.app/:splat"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from = "https://www.itbicheck.app/*"
+  to   = "https://itbicheck.app/:splat"
+  status = 301
+  force  = true
+
+# ------------------------------------------------------------
+# Headers de segurança globais
+# Aplicados a todas as páginas do site
+# ------------------------------------------------------------
+
+[[headers]]
+  for = "/*"
+
+  [headers.values]
+
+    # HSTS: força HTTPS por 1 ano, inclui subdomínios
+    # Após o site estar funcionando em HTTPS, você pode submeter em:
+    # https://hstspreload.org para entrar na lista do Chrome/Firefox
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+    # Impede que o site seja carregado em iframe (evita clickjacking)
+    X-Frame-Options = "DENY"
+
+    # Impede que o browser "adivinhe" o tipo de arquivo (MIME sniffing)
+    X-Content-Type-Options = "nosniff"
+
+    # Controla informações enviadas no cabeçalho Referer
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+    # Desativa funcionalidades do navegador que o site não usa
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()"
+
+    # Content Security Policy — define fontes confiáveis de conteúdo
+    # Ajuste se você adicionar fontes externas (ex: Google Fonts, CDN)
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'unsafe-inline';
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com;
+      img-src 'self' data:;
+      connect-src 'self';
+      frame-ancestors 'none';
+      base-uri 'self';
+      form-action 'self' https://wa.me https://api.whatsapp.com;
+    """
+
+    # Proteção XSS para browsers mais antigos
+    X-XSS-Protection = "1; mode=block"
+
+    # Impede que o Google indexe versões em cache que possam roubar dados
+    Cache-Control = "no-store, no-cache, must-revalidate, proxy-revalidate"
+
+# ------------------------------------------------------------
+# Cache agressivo para assets estáticos (melhora performance)
+# Sobrescreve o Cache-Control acima apenas para esses arquivos
+# ------------------------------------------------------------
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
