@@ -222,6 +222,9 @@
     .vvr-steps a { color:var(--green); text-decoration:underline; }
     .vvr-steps code { background:var(--gray-100); padding:1px 6px; border-radius:4px; font-size:13px; color:var(--gray-800); }
     .vvr-tip { background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:12px 14px; font-size:13px; color:#92400e; margin-top:14px; line-height:1.6; }
+    .vvr-boleto-wrap { margin-top:14px; }
+    .vvr-boleto-img { width:100%; border-radius:8px; border:1px solid var(--gray-200); box-shadow:0 2px 10px rgba(0,0,0,.08); display:block; }
+    .vvr-boleto-caption { margin-top:8px; font-size:12px; color:var(--gray-600); line-height:1.5; text-align:center; }
     .vvr-warn { background:var(--blue-light); border:1px solid #bfdbfe; border-radius:8px; padding:12px 14px; font-size:13px; color:#1e40af; margin-bottom:20px; line-height:1.6; }
 
     /* SOCIAL LINKS */
@@ -406,16 +409,15 @@
       <div class="vvr-card">
         <span class="vvr-badge">Método 1 — mais fácil</span>
         <h3>Você já tem a guia de ITBI</h3>
-        <p>Se você já gerou ou recebeu a guia de ITBI emitida pela Prefeitura, procure o campo <strong>"Valores Utilizados"</strong>. O Valor Venal de Referência está na linha destacada abaixo:</p>
+        <p>Se você já gerou ou recebeu a guia de ITBI emitida pela Prefeitura, procure o campo <strong>"Valores Utilizados"</strong>. O <strong>Valor Venal de Referência</strong> está indicado na linha destacada — veja o exemplo real abaixo:</p>
         <div class="vvr-example">
-          <div class="vvr-example-label">Exemplo de guia de ITBI — Prefeitura de São Paulo</div>
-          <div class="vvr-example-box">
-            <div class="vvr-row">NATUREZA: COMPRA E VENDA</div>
-            <div class="vvr-row">VALOR DE TRANSAÇÃO: R$ 500.000,00</div>
-            <div class="vvr-row highlight">➜ VALOR VENAL DE REFERÊNCIA: R$ 25.562.375,00</div>
+          <div class="vvr-example-label">Exemplo real de guia de ITBI — Prefeitura de São Paulo</div>
+          <div class="vvr-boleto-wrap">
+            <img src="img/boleto.png" alt="Exemplo de guia de ITBI da Prefeitura de São Paulo com o campo Valor Venal de Referência destacado" class="vvr-boleto-img" />
+            <div class="vvr-boleto-caption">⬆️ O campo <strong>"Valor Venal de Referência"</strong> é o que você deve informar na calculadora — não o "Valor de Transação".</div>
           </div>
         </div>
-        <div class="vvr-tip">💡 É exatamente esse valor (Valor Venal de Referência) que você deve inserir no campo da calculadora — não o valor de transação.</div>
+        <div class="vvr-tip">💡 Neste exemplo, o valor de transação era R$ 500.000, mas a Prefeitura calculou o ITBI sobre R$ 25.562.375 — mais de 50× o valor real. É exatamente esse tipo de distorção que o STJ declarou ilegal.</div>
       </div>
 
       <!-- Método 2 — SQL São Paulo -->
