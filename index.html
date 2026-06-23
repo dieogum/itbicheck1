@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ══ Favicon ══ -->
+  <link rel="icon"             type="image/png" sizes="32x32"   href="img/logo.png" />
+  <link rel="icon"             type="image/png" sizes="192x192" href="img/logo.png" />
+  <link rel="apple-touch-icon"                                  href="img/logo.png" />
+  <meta name="theme-color" content="#16a34a" />
+
+  <!-- ══ SEO Principal ══ -->
+  <title>ITBI Check — Calculadora de ITBI: Você está pagando a mais?</title>
+  <meta name="description" content="Calcule em segundos se você está pagando ITBI a mais na compra do seu imóvel. Ferramenta gratuita baseada na decisão do STJ. Válida para todo o Brasil." />
+  <meta name="keywords" content="ITBI, calculadora ITBI, ITBI a menos, reduzir ITBI, restituição ITBI, ITBI valor venal, ITBI valor venal referência, ITBI cobrado a mais, imposto compra imóvel, ITBI STJ, como pagar menos ITBI, ITBI indevido, ITBI devolução, ITBI São Paulo, ITBIcheck" />
+  <link rel="canonical" href="https://itbicheck.com.br/" />
+
+  <!-- ══ Open Graph ══ -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://itbicheck.com.br/" />
+  <meta property="og:title"       content="ITBI Check — Você está pagando ITBI a mais?" />
+  <meta property="og:description" content="Descubra em segundos se você pagou ou vai pagar ITBI além do devido. Calculadora gratuita, válida para todo o Brasil." />
+  <meta property="og:image"       content="https://itbicheck.com.br/og-image.png" />
+  <meta property="og:locale"      content="pt_BR" />
+
+  <!-- ══ Twitter Card ══ -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="ITBI Check — Você está pagando ITBI a mais?" />
+  <meta name="twitter:description" content="Calculadora gratuita de ITBI. Descubra quanto você pode economizar ou recuperar." />
+
+  <!-- ══ Schema.org — WebApplication ══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ITBI Check",
+    "url": "https://itbicheck.com.br",
+    "description": "Calculadora gratuita de ITBI que compara o Valor Venal de Referência com o valor real de transação, identificando cobranças indevidas com base na jurisprudência do STJ (Tema 1113).",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" },
+    "inLanguage": "pt-BR"
+  }
+  </script>
+
+  <!-- ══ Schema.org — FAQPage ══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "O que é ITBI?", "acceptedAnswer": { "@type": "Answer", "text": "ITBI (Imposto sobre Transmissão de Bens Imóveis) é o imposto municipal cobrado na compra e venda de imóveis. A alíquota varia por município — em São Paulo é 3%." } },
+      { "@type": "Question", "name": "Por que estou pagando ITBI a mais?", "acceptedAnswer": { "@type": "Answer", "text": "Muitos municípios calculam o ITBI sobre o Valor Venal de Referência (VVR), que costuma ser maior que o preço real de venda. O STJ (Tema 1113) determinou que o imposto deve incidir sobre o valor real da transação." } },
+      { "@type": "Question", "name": "Posso recuperar o ITBI que paguei a mais?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. Compras realizadas nos últimos 5 anos têm direito à restituição do valor pago indevidamente, por via administrativa ou judicial." } }
+    ]
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #16a34a; --green-light: #dcfce7; --green-dark: #14532d;
+      --red: #dc2626; --red-light: #fee2e2;
+      --blue: #1d4ed8; --blue-light: #eff6ff;
+      --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+      --gray-600: #4b5563; --gray-800: #1f2937; --gray-900: #111827;
+      --white: #fff;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    body { font-family: var(--font); color: var(--gray-900); background: var(--white); line-height: 1.6; }
+
+    /* NAV */
+    nav { display:flex; align-items:center; justify-content:space-between; padding:14px 24px; border-bottom:1px solid var(--gray-200); position:sticky; top:0; background:var(--white); z-index:100; }
+    .logo { font-size:20px; font-weight:800; color:var(--green); letter-spacing:-0.5px; }
+    .logo span { color:var(--gray-900); }
+    .nav-cta { background:#25D366; color:#fff; border:none; border-radius:8px; padding:9px 16px; font-size:14px; font-weight:600; cursor:pointer; text-decoration:none; display:flex; align-items:center; gap:6px; }
+
+    /* HERO */
+    .hero { background:linear-gradient(135deg,#f0fdf4 0%,#fff 55%); padding:56px 24px 44px; text-align:center; }
+    .hero-badge { display:inline-block; background:var(--red-light); color:var(--red); font-size:12px; font-weight:700; padding:4px 12px; border-radius:20px; margin-bottom:18px; text-transform:uppercase; letter-spacing:.5px; }
+    h1 { font-size:clamp(26px,5.5vw,46px); font-weight:800; line-height:1.15; letter-spacing:-1px; max-width:680px; margin:0 auto 14px; }
+    h1 em { font-style:normal; color:var(--green); }
+    .hero-sub { font-size:clamp(15px,2.2vw,18px); color:var(--gray-600); max-width:520px; margin:0 auto 32px; }
+    .hero-stats { display:flex; justify-content:center; gap:32px; flex-wrap:wrap; margin-bottom:32px; }
+    .stat { text-align:center; }
+    .stat-n { font-size:clamp(28px,5vw,40px); font-weight:800; color:var(--green); line-height:1; }
+    .stat-l { font-size:12px; color:var(--gray-600); margin-top:2px; }
+    .hero-cta { display:inline-flex; align-items:center; gap:8px; background:#25D366; color:#fff; border-radius:12px; padding:16px 28px; font-size:16px; font-weight:700; text-decoration:none; box-shadow:0 4px 14px rgba(37,211,102,.35); transition:transform .15s,box-shadow .15s; }
+    .hero-cta:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(37,211,102,.4); }
+    .hero-disclaimer { margin-top:12px; font-size:13px; color:var(--gray-600); }
+
+    /* CALCULADORA */
+    .calc-section { background:var(--gray-50); padding:64px 24px; }
+    .calc-section > .inner { max-width:600px; margin:0 auto; }
+    .section-label { font-size:12px; font-weight:700; color:var(--green); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+    h2 { font-size:clamp(20px,4vw,30px); font-weight:800; letter-spacing:-.5px; margin-bottom:12px; }
+    .calc-card { background:#fff; border-radius:16px; padding:28px; border:1px solid var(--gray-200); box-shadow:0 2px 16px rgba(0,0,0,.06); }
+    .field { margin-bottom:16px; }
+    .field label { font-size:13px; font-weight:600; color:var(--gray-800); display:block; margin-bottom:6px; }
+    .field input, .field select { width:100%; padding:12px 14px; border:1.5px solid #d1d5db; border-radius:10px; font-size:15px; font-family:var(--font); outline:none; transition:border-color .15s; background:#fff; }
+    .field input:focus, .field select:focus { border-color:var(--green); }
+    .field-hint { font-size:12px; color:#9ca3af; margin-top:4px; }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media(max-width:480px){ .field-row { grid-template-columns:1fr; } }
+    .toggle-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .toggle-btn { border:2px solid var(--gray-200); border-radius:10px; padding:12px; text-align:center; cursor:pointer; font-size:13px; font-weight:600; color:var(--gray-800); transition:all .15s; background:#fff; font-family:var(--font); }
+    .toggle-btn.active { border-color:var(--green); background:var(--green-light); color:var(--green-dark); }
+    .calc-btn { width:100%; background:var(--green); color:#fff; border:none; border-radius:10px; padding:14px; font-size:16px; font-weight:700; cursor:pointer; font-family:var(--font); transition:background .15s; }
+    .calc-btn:hover { background:#15803d; }
+    .aliq-note { font-size:11px; color:#9ca3af; margin-top:3px; }
+
+    /* Prazo badge */
+    .prazo-ok   { display:inline-block; background:#dcfce7; color:#166534; font-size:12px; font-weight:700; padding:3px 10px; border-radius:20px; margin-top:4px; }
+    .prazo-warn { display:inline-block; background:#fef9c3; color:#854d0e; font-size:12px; font-weight:700; padding:3px 10px; border-radius:20px; margin-top:4px; }
+    .prazo-out  { display:inline-block; background:#fee2e2; color:#991b1b; font-size:12px; font-weight:700; padding:3px 10px; border-radius:20px; margin-top:4px; }
+
+    /* Resultado */
+    #resultado { display:none; margin-top:24px; padding-top:24px; border-top:1px solid var(--gray-200); }
+    .res-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+    @media(max-width:460px){ .res-grid { grid-template-columns:1fr; } }
+    .res-box { border-radius:10px; padding:14px; }
+    .res-box.bad  { background:#fff5f5; border:1px solid #fca5a5; }
+    .res-box.good { background:#f0fdf4; border:1px solid #86efac; }
+    .res-tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; margin-bottom:3px; }
+    .res-tag.bad { color:var(--red); } .res-tag.good { color:var(--green); }
+    .res-base { font-size:12px; color:#6b7280; margin-bottom:2px; }
+    .res-val { font-size:22px; font-weight:800; }
+    .res-val.bad { color:var(--red); } .res-val.good { color:var(--green); }
+    .res-diff { background:var(--gray-900); color:#fff; border-radius:10px; padding:18px; text-align:center; margin-bottom:14px; }
+    .res-diff-lbl { font-size:12px; color:#9ca3af; margin-bottom:3px; }
+    .res-diff-val { font-size:30px; font-weight:800; color:#4ade80; }
+    .res-diff-sub { font-size:12px; color:#6b7280; margin-top:3px; }
+    .res-prazo { font-size:13px; background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:10px 14px; margin-bottom:14px; color:#92400e; }
+    .res-prazo-out { font-size:13px; background:#fee2e2; border:1px solid #fca5a5; border-radius:8px; padding:10px 14px; margin-bottom:14px; color:#991b1b; }
+    .res-ok { background:#f0fdf4; border:1px solid #86efac; border-radius:10px; padding:14px; text-align:center; font-size:14px; font-weight:600; color:#166534; margin-bottom:14px; }
+    .wa-btn { display:flex; align-items:center; justify-content:center; gap:8px; background:#25D366; color:#fff; padding:14px; border-radius:10px; font-size:15px; font-weight:700; text-decoration:none; }
+    .wa-btn:hover { background:#22c55e; }
+
+    /* COMO FUNCIONA */
+    .how-section { padding:64px 24px; max-width:800px; margin:0 auto; }
+    .steps { display:flex; flex-direction:column; gap:20px; margin-top:8px; }
+    .step { display:flex; gap:16px; align-items:flex-start; }
+    .step-icon { width:48px; height:48px; border-radius:12px; background:var(--green-light); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+    .step h3 { font-size:15px; font-weight:700; margin-bottom:3px; }
+    .step p  { font-size:14px; color:var(--gray-600); }
+
+    /* PROOF BAR */
+    .proof-bar { background:var(--gray-900); color:#fff; padding:32px 24px; text-align:center; }
+    .proof-bar h2 { color:#fff; margin-bottom:8px; }
+    .proof-bar p  { color:#d1d5db; font-size:15px; max-width:560px; margin:0 auto; }
+
+    /* BASE JURÍDICA */
+    .legal-section { padding:64px 24px; max-width:800px; margin:0 auto; }
+    .legal-card { background:var(--gray-50); border:1px solid var(--gray-200); border-radius:16px; padding:28px; }
+    .legal-card h3 { font-size:17px; font-weight:700; margin-bottom:8px; }
+    .legal-card p  { font-size:14px; color:var(--gray-600); line-height:1.7; }
+    .tag-list { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+    .tag { background:#fff; border:1px solid var(--gray-200); border-radius:20px; padding:4px 12px; font-size:12px; font-weight:600; color:var(--gray-800); }
+
+    /* FAQ */
+    .faq-section { padding:64px 24px; max-width:800px; margin:0 auto; }
+    .faq-list { display:flex; flex-direction:column; gap:10px; }
+    .faq-item { border:1px solid var(--gray-200); border-radius:12px; overflow:hidden; }
+    .faq-q { width:100%; text-align:left; background:none; border:none; padding:16px 20px; font-size:15px; font-weight:600; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:12px; color:var(--gray-900); font-family:var(--font); }
+    .faq-q span { font-size:18px; color:var(--green); transition:transform .2s; flex-shrink:0; }
+    .faq-item.open .faq-q span { transform:rotate(45deg); }
+    .faq-a { max-height:0; overflow:hidden; transition:max-height .3s ease; font-size:14px; color:var(--gray-600); line-height:1.7; }
+    .faq-item.open .faq-a { max-height:400px; }
+    .faq-a-inner { padding:0 20px 16px; }
+
+    /* QUEM SOMOS */
+    .team-section { padding:72px 24px; background:var(--gray-50); }
+    .team-section > .inner { max-width:960px; margin:0 auto; }
+    .team-section .section-label { text-align:center; }
+    .team-section h2 { text-align:center; margin-bottom:8px; }
+    .team-intro { text-align:center; font-size:15px; color:var(--gray-600); max-width:600px; margin:0 auto 48px; }
+    .team-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+    @media(max-width:700px){ .team-grid { grid-template-columns:1fr; } }
+    .team-card { background:#fff; border-radius:20px; padding:32px 28px; border:1px solid var(--gray-200); box-shadow:0 2px 16px rgba(0,0,0,.06); display:flex; flex-direction:column; align-items:center; text-align:center; }
+    .team-photo-wrap { width:140px; height:140px; border-radius:50%; overflow:hidden; margin-bottom:20px; border:3px solid var(--green-light); flex-shrink:0; background:var(--gray-100); display:flex; align-items:center; justify-content:center; }
+    .team-photo-wrap img { width:100%; height:100%; object-fit:cover; object-position:center top; }
+    .team-initials { font-size:36px; font-weight:800; color:var(--green); }
+    .team-name { font-size:18px; font-weight:800; margin-bottom:4px; letter-spacing:-.3px; }
+    .team-role { font-size:13px; font-weight:700; color:var(--green); margin-bottom:12px; text-transform:uppercase; letter-spacing:.5px; }
+    .team-bio { font-size:14px; color:var(--gray-600); line-height:1.7; text-align:left; }
+    .team-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; justify-content:center; }
+    .team-tag { background:var(--green-light); color:var(--green-dark); font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+    .team-clients { margin-top:14px; font-size:12px; color:#9ca3af; text-align:center; }
+    .team-clients strong { color:var(--gray-800); }
+
+    /* CTA FINAL */
+    .cta-final { background:linear-gradient(135deg,var(--green-dark),#166534); color:#fff; text-align:center; padding:64px 24px; }
+    .cta-final h2 { color:#fff; max-width:520px; margin:0 auto 10px; }
+    .cta-final p  { color:#bbf7d0; font-size:16px; margin-bottom:32px; }
+    .cta-final .wa-btn { display:inline-flex; font-size:17px; padding:18px 36px; }
+    .cta-note { margin-top:14px; font-size:13px; color:#86efac; }
+
+    /* FOOTER */
+    footer { background:var(--gray-100); padding:24px; text-align:center; font-size:12px; color:var(--gray-600); }
+    footer a { color:var(--green); text-decoration:none; }
+    .divider { border:none; border-top:1px solid var(--gray-200); }
+
+    /* WA SVG */
+    .wa-svg { width:20px; height:20px; fill:currentColor; flex-shrink:0; }
+
+    /* VVR TUTORIAL */
+    .vvr-section { background:var(--gray-50); padding:64px 24px; }
+    .vvr-section > .inner { max-width:800px; margin:0 auto; }
+    .vvr-grid { display:flex; flex-direction:column; gap:16px; margin-top:8px; }
+    .vvr-card { background:#fff; border:1px solid var(--gray-200); border-radius:14px; padding:24px 28px; }
+    .vvr-card h3 { font-size:16px; font-weight:700; margin:8px 0 10px; }
+    .vvr-card p  { font-size:14px; color:var(--gray-600); line-height:1.7; }
+    .vvr-badge { display:inline-block; background:var(--green-light); color:var(--green-dark); font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; text-transform:uppercase; letter-spacing:.4px; }
+    .vvr-example { margin-top:16px; }
+    .vvr-example-label { font-size:12px; color:#9ca3af; margin-bottom:6px; font-weight:600; text-transform:uppercase; letter-spacing:.4px; }
+    .vvr-example-box { background:var(--gray-50); border:1px solid var(--gray-200); border-radius:10px; padding:14px 18px; font-family:'Courier New', monospace; font-size:13px; }
+    .vvr-row { padding:2px 0; color:var(--gray-600); }
+    .vvr-row.highlight { color:#166534; font-weight:700; background:#dcfce7; margin:6px -4px 2px; padding:6px 8px; border-radius:6px; display:flex; align-items:center; gap:6px; }
+    .vvr-steps { font-size:14px; color:var(--gray-600); line-height:1.8; padding-left:22px; margin:12px 0; }
+    .vvr-steps li { margin-bottom:6px; }
+    .vvr-steps a { color:var(--green); text-decoration:underline; }
+    .vvr-steps code { background:var(--gray-100); padding:1px 6px; border-radius:4px; font-size:13px; color:var(--gray-800); }
+    .vvr-tip { background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:12px 14px; font-size:13px; color:#92400e; margin-top:14px; line-height:1.6; }
+    .vvr-warn { background:var(--blue-light); border:1px solid #bfdbfe; border-radius:8px; padding:12px 14px; font-size:13px; color:#1e40af; margin-bottom:20px; line-height:1.6; }
+
+    /* SOCIAL LINKS */
+    .team-social { display:flex; gap:10px; margin-top:16px; justify-content:center; flex-wrap:wrap; }
+    .team-social a { display:flex; align-items:center; gap:6px; padding:7px 16px; border-radius:20px; font-size:12px; font-weight:600; text-decoration:none; transition:opacity .15s; }
+    .team-social a:hover { opacity:.85; }
+    .social-li { background:#0a66c2; color:#fff !important; }
+    .social-ig { background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); color:#fff !important; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo" aria-label="ITBI Check">ITBI<span>Check</span></div>
+  <a href="#calculadora" class="nav-cta">
+    <svg class="wa-svg" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="white" stroke-width="2" fill="none"/></svg>
+    Calcular agora
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-badge">⚠️ Válido para todo o Brasil</div>
+  <h1>Você está pagando <em>ITBI a mais</em> na compra do seu imóvel?</h1>
+  <p class="hero-sub">Descubra em segundos quanto você pode economizar ou recuperar. Calculadora gratuita baseada na decisão do STJ — válida em qualquer município do Brasil.</p>
+
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-n">R$8.000</div><div class="stat-l">Cobrança indevida média</div></div>
+    <div class="stat"><div class="stat-n">5 anos</div><div class="stat-l">Prazo para restituição</div></div>
+    <div class="stat"><div class="stat-n">STJ</div><div class="stat-l">Decisão vinculante (Tema 1113)</div></div>
+  </div>
+
+  <a href="#calculadora" class="hero-cta">
+    <svg class="wa-svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    Calcular meu ITBI gratuitamente
+  </a>
+  <p class="hero-disclaimer">✓ 100% gratuito &nbsp;·&nbsp; ✓ Sem cadastro &nbsp;·&nbsp; ✓ Resultado imediato</p>
+</header>
+
+<!-- CALCULADORA -->
+<section class="calc-section" id="calculadora" aria-label="Calculadora de ITBI">
+  <div class="inner">
+    <div class="section-label">Calculadora gratuita</div>
+    <h2>Quanto você deveria pagar de ITBI?</h2>
+    <p style="font-size:15px;color:var(--gray-600);margin-bottom:24px;">Preencha os campos abaixo. O <strong>Valor Venal de Referência</strong> está na guia de ITBI emitida pela Prefeitura — não é o mesmo que o valor do IPTU. Não sabe onde encontrar? <a href="#vvr-tutorial" style="color:var(--green);text-decoration:underline;">Veja o tutorial ↓</a></p>
+
+    <div class="calc-card">
+
+      <!-- Cenário -->
+      <div class="field">
+        <label>Qual é a sua situação?</label>
+        <div class="toggle-row">
+          <button class="toggle-btn active" id="btnComprar" onclick="setCenario('comprar')">🏠 Vou comprar</button>
+          <button class="toggle-btn" id="btnComprei" onclick="setCenario('comprei')">📋 Já comprei</button>
+        </div>
+      </div>
+
+      <!-- Município + Alíquota -->
+      <div class="field-row">
+        <div class="field" style="margin-bottom:0">
+          <label for="inputMunicipio">Município</label>
+          <select id="inputMunicipio" onchange="aplicarAliquota()">
+            <option value="">— Selecione a capital —</option>
+            <option value="2.0">Rio Branco – AC</option>
+            <option value="2.0">Maceió – AL</option>
+            <option value="2.0">Macapá – AP</option>
+            <option value="2.0">Manaus – AM</option>
+            <option value="3.0">Salvador – BA</option>
+            <option value="3.0">Fortaleza – CE</option>
+            <option value="3.0">Brasília – DF</option>
+            <option value="2.0">Vitória – ES</option>
+            <option value="2.0">Goiânia – GO</option>
+            <option value="2.0">São Luís – MA</option>
+            <option value="2.0">Cuiabá – MT</option>
+            <option value="2.0">Campo Grande – MS</option>
+            <option value="3.0">Belo Horizonte – MG</option>
+            <option value="2.0">Belém – PA</option>
+            <option value="2.0">João Pessoa – PB</option>
+            <option value="2.7">Curitiba – PR</option>
+            <option value="3.0">Recife – PE</option>
+            <option value="2.0">Teresina – PI</option>
+            <option value="3.0">Rio de Janeiro – RJ</option>
+            <option value="2.0">Natal – RN</option>
+            <option value="3.0">Porto Alegre – RS</option>
+            <option value="2.0">Porto Velho – RO</option>
+            <option value="2.0">Boa Vista – RR</option>
+            <option value="2.0">Florianópolis – SC</option>
+            <option value="3.0">São Paulo – SP</option>
+            <option value="2.0">Aracaju – SE</option>
+            <option value="2.0">Palmas – TO</option>
+            <option value="outro">Outro município</option>
+          </select>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label for="inputAliq">Alíquota do ITBI (%)</label>
+          <input id="inputAliq" type="number" min="0.1" max="5" step="0.1" value="3" placeholder="3" />
+          <p class="aliq-note">Editável — confirme na Prefeitura local.</p>
+        </div>
+      </div>
+
+      <!-- Valor Venal de Referência -->
+      <div class="field" style="margin-top:16px">
+        <label for="inputVVR">Valor Venal de Referência — VVR (R$)</label>
+        <input id="inputVVR" type="text" placeholder="ex: R$ 850.000,00" oninput="mascarar(this)" />
+        <p class="field-hint">Encontrado na guia de ITBI emitida pela Prefeitura. <strong>Não confunda com o valor venal do IPTU.</strong> <a href="#vvr-tutorial" style="color:var(--green);">Como consultar →</a></p>
+      </div>
+
+      <!-- Valor de Venda -->
+      <div class="field">
+        <label for="inputVenda">Valor real de venda / transação (R$)</label>
+        <input id="inputVenda" type="text" placeholder="ex: R$ 620.000,00" oninput="mascarar(this)" />
+        <p class="field-hint">O preço que está (ou estará) na escritura ou contrato de compra e venda.</p>
+      </div>
+
+      <!-- Data da compra (somente "Já comprei") -->
+      <div class="field" id="fieldData" style="display:none">
+        <label for="inputData">Data da compra / pagamento do ITBI</label>
+        <input id="inputData" type="date" onchange="verificarPrazo()" />
+        <p class="field-hint">Usamos essa data para verificar se você ainda está dentro do prazo de restituição de 5 anos.</p>
+        <div id="prazoBadge" style="margin-top:6px;"></div>
+      </div>
+
+      <button class="calc-btn" onclick="calcular()">Calcular agora →</button>
+
+      <!-- Erro -->
+      <div id="erro" style="display:none;margin-top:14px;background:#fee2e2;border-radius:10px;padding:12px 14px;font-size:14px;color:#dc2626;"></div>
+
+      <!-- Resultado -->
+      <div id="resultado">
+        <div id="resultadoConteudo"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- COMO FUNCIONA -->
+<section class="how-section" aria-labelledby="como-funciona-h2">
+  <div class="section-label">Como funciona</div>
+  <h2 id="como-funciona-h2">Em três passos, você sabe tudo</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-icon">📄</div>
+      <div>
+        <h3>1. Descubra o Valor Venal de Referência</h3>
+        <p>O <strong>Valor Venal de Referência (VVR)</strong> está na guia de ITBI emitida pela Prefeitura — ou pode ser consultado online pelo número do SQL do imóvel. <strong>Atenção:</strong> não é o mesmo que o valor venal do IPTU. <a href="#vvr-tutorial" style="color:var(--green);">Veja como consultar →</a></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-icon">🧮</div>
+      <div>
+        <h3>2. Informe o valor real de venda</h3>
+        <p>Digite o preço que você pagou (ou vai pagar) pelo imóvel — aquele que consta no contrato de compra e venda ou na escritura pública.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-icon">💰</div>
+      <div>
+        <h3>3. Veja o resultado e aja</h3>
+        <p>O ITBI Check calcula a diferença na hora. Se houver cobrança indevida, você recebe um diagnóstico e conectamos você ao nosso parceiro jurídico.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TUTORIAL: COMO ENCONTRAR O VVR -->
+<section class="vvr-section" id="vvr-tutorial" aria-labelledby="vvr-h2">
+  <div class="inner">
+    <div class="section-label">Tutorial</div>
+    <h2 id="vvr-h2">Como consultar o Valor Venal de Referência</h2>
+
+    <div class="vvr-warn">
+      ℹ️ <strong>Importante:</strong> o Valor Venal de Referência (VVR) <strong>não é o mesmo</strong> que o valor venal usado no IPTU. O VVR é fixado pela Prefeitura especificamente para calcular o ITBI — e costuma ser bem maior que o preço real do imóvel. É justamente essa diferença que gera a cobrança indevida.
+    </div>
+
+    <div class="vvr-grid">
+
+      <!-- Método 1 — Guia de ITBI -->
+      <div class="vvr-card">
+        <span class="vvr-badge">Método 1 — mais fácil</span>
+        <h3>Você já tem a guia de ITBI</h3>
+        <p>Se você já gerou ou recebeu a guia de ITBI emitida pela Prefeitura, procure o campo <strong>"Valores Utilizados"</strong>. O Valor Venal de Referência está na linha destacada abaixo:</p>
+        <div class="vvr-example">
+          <div class="vvr-example-label">Exemplo de guia de ITBI — Prefeitura de São Paulo</div>
+          <div class="vvr-example-box">
+            <div class="vvr-row">NATUREZA: COMPRA E VENDA</div>
+            <div class="vvr-row">VALOR DE TRANSAÇÃO: R$ 500.000,00</div>
+            <div class="vvr-row highlight">➜ VALOR VENAL DE REFERÊNCIA: R$ 25.562.375,00</div>
+          </div>
+        </div>
+        <div class="vvr-tip">💡 É exatamente esse valor (Valor Venal de Referência) que você deve inserir no campo da calculadora — não o valor de transação.</div>
+      </div>
+
+      <!-- Método 2 — SQL São Paulo -->
+      <div class="vvr-card">
+        <span class="vvr-badge">Método 2 · São Paulo</span>
+        <h3>Consultar pelo número do SQL (antes de pagar)</h3>
+        <p>Se você ainda não tem a guia de ITBI, é possível consultar o VVR diretamente no portal da Prefeitura de São Paulo, informando o SQL do imóvel e a data da negociação:</p>
+        <ol class="vvr-steps">
+          <li>Acesse o portal: <a href="https://itbi.prefeitura.sp.gov.br/valorreferencia/tvm/frm_tvm_consulta_valor.aspx" target="_blank" rel="noopener noreferrer">Consulta Valor Venal de Referência — SF-SP</a></li>
+          <li>Preencha o <strong>Cadastro do Imóvel (número do SQL / IPTU)</strong> nos campos indicados. Exemplo: <code>005.003.0048-8</code></li>
+          <li>No campo <strong>Data</strong>, informe a <strong>data em que foi realizada a negociação</strong> (ou a data prevista para a transação). O VVR pode variar conforme a data consultada.</li>
+          <li>Clique em <strong>Pesquisar</strong> e anote o valor exibido como "Valor Venal de Referência".</li>
+        </ol>
+        <div class="vvr-tip">💡 <strong>Onde encontro o SQL?</strong> No carnê do IPTU (campo "Número do IPTU"), na matrícula do imóvel no Registro de Imóveis ou na escritura pública.</div>
+      </div>
+
+      <!-- Outros municípios -->
+      <div class="vvr-card">
+        <span class="vvr-badge">Outros municípios</span>
+        <h3>Como consultar na sua cidade</h3>
+        <p>Cada Prefeitura tem seu próprio sistema de consulta. O caminho mais rápido é solicitar diretamente a <strong>guia de ITBI</strong> no site da Secretaria da Fazenda do seu município — o Valor Venal de Referência sempre estará impresso nela. Caso tenha dificuldade, nossos especialistas podem ajudar você a identificar o valor correto antes de prosseguir.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- PROOF BAR -->
+<div class="proof-bar" role="region" aria-label="Por que o ITBI está sendo cobrado a mais">
+  <h2>Por que tantos brasileiros pagam ITBI a mais?</h2>
+  <p>Os municípios calculam o ITBI sobre o <strong>Valor Venal de Referência</strong> — um valor que eles mesmos fixam, geralmente acima do preço real de mercado. O STJ decidiu que isso é ilegal: o imposto deve ser calculado sobre o valor real da transação, e ponto final.</p>
+</div>
+
+<hr class="divider" />
+
+<!-- BASE JURÍDICA -->
+<section class="legal-section" aria-labelledby="legal-h2">
+  <div class="section-label">Base jurídica</div>
+  <h2 id="legal-h2">Amparado pela mais alta corte tributária do Brasil</h2>
+  <p style="font-size:15px;color:var(--gray-600);margin-bottom:24px;">Não é uma tese jurídica experimental. É jurisprudência consolidada e vinculante.</p>
+
+  <div class="legal-card">
+    <h3>STJ — Tema 1113 (REsp 1.937.821/SP)</h3>
+    <p>Em março de 2022, a Primeira Seção do Superior Tribunal de Justiça fixou por recurso repetitivo que <strong>"a base de cálculo do ITBI é o valor do imóvel transmitido em condições normais de mercado"</strong> — ou seja, o valor real da transação. O Município não pode impor unilateralmente uma base de cálculo maior. Decisões do TJ-SP e juízos de todo o Brasil vêm aplicando essa tese desde então.</p>
+    <div class="tag-list">
+      <span class="tag">STJ Tema 1113</span>
+      <span class="tag">REsp 1.937.821/SP</span>
+      <span class="tag">Recurso Repetitivo</span>
+      <span class="tag">Vinculante para todos os municípios</span>
+      <span class="tag">Prazo de restituição: 5 anos</span>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- FAQ -->
+<section class="faq-section" aria-labelledby="faq-h2">
+  <div class="section-label">Dúvidas frequentes</div>
+  <h2 id="faq-h2">Perguntas sobre ITBI e restituição</h2>
+
+  <div class="faq-list">
+    <div class="faq-item" id="f1">
+      <button class="faq-q" onclick="toggleFaq('f1')">O que é ITBI e quem paga? <span>+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">ITBI é o Imposto sobre Transmissão de Bens Imóveis, cobrado pelo município toda vez que um imóvel muda de dono. Quem paga é o comprador, geralmente antes de lavrar a escritura. A alíquota varia por cidade, mas costuma ser entre 2% e 3% do valor base.</div></div>
+    </div>
+    <div class="faq-item" id="f2">
+      <button class="faq-q" onclick="toggleFaq('f2')">Como sei qual é o Valor Venal de Referência do meu imóvel? <span>+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">O <strong>Valor Venal de Referência (VVR)</strong> é o valor que a Prefeitura usa especificamente para calcular o ITBI — não confunda com o valor venal do IPTU, que costuma ser bem menor. O VVR está impresso na guia de ITBI emitida pela Prefeitura (campo "Valor Venal de Referência"). Para São Paulo, você também pode consultá-lo online pelo portal da Secretaria da Fazenda, informando o número do SQL do imóvel e a data da negociação. <a href="#vvr-tutorial" style="color:var(--green);">Veja o tutorial completo.</a></div></div>
+    </div>
+    <div class="faq-item" id="f3">
+      <button class="faq-q" onclick="toggleFaq('f3')">Comprei o imóvel há 2 anos. Ainda posso recuperar o ITBI? <span>+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sim. O prazo de prescrição para pedir a restituição de ITBI pago indevidamente é de 5 anos a partir do pagamento. Portanto, compras realizadas nos últimos 5 anos ainda estão dentro do prazo. O pedido pode ser feito por via administrativa (na própria Prefeitura) ou judicial.</div></div>
+    </div>
+    <div class="faq-item" id="f4">
+      <button class="faq-q" onclick="toggleFaq('f4')">Isso vale para qualquer cidade do Brasil? <span>+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sim. A decisão do STJ (Tema 1113) é vinculante para todos os municípios brasileiros. Cidades como São Paulo, Rio de Janeiro, Belo Horizonte, Curitiba, Porto Alegre, Salvador, Fortaleza e centenas de outras têm histórico de cobrar ITBI sobre valores acima do preço real de transação.</div></div>
+    </div>
+    <div class="faq-item" id="f5">
+      <button class="faq-q" onclick="toggleFaq('f5')">Quanto custa o diagnóstico? <span>+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">A calculadora e o diagnóstico são completamente gratuitos. Se você quiser seguir com a contestação ou ação de restituição, nosso parceiro jurídico trabalha no modelo de honorários de êxito: você só paga uma porcentagem do valor recuperado, combinada previamente. Sem êxito, sem custo.</div></div>
+    </div>
+    <div class="faq-item" id="f6">
+      <button class="faq-q" onclick="toggleFaq('f6')">Quero contestar antes de pagar. Como funciona? <span>+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">É possível entrar com uma ação cautelar ou mandado de segurança para pagar o ITBI pelo valor correto (valor de transação) antes de lavrar a escritura. Nosso parceiro jurídico avalia cada caso e orienta sobre o melhor caminho — preventivo ou de restituição.</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- QUEM SOMOS -->
+<section class="team-section" aria-labelledby="team-h2">
+  <div class="inner">
+    <div class="section-label">Quem está por trás</div>
+    <h2 id="team-h2">Especialistas em ITBI e Direito Imobiliário</h2>
+    <p class="team-intro">O ITBI Check reúne expertise em direito tributário e imobiliário para garantir que você tome a melhor decisão na compra do seu imóvel.</p>
+
+    <div class="team-grid">
+
+      <!-- Diego -->
+      <div class="team-card">
+        <div class="team-photo-wrap">
+          <img src="img/diego.jpg" alt="Diego Rodrigues Vieira"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="team-initials" style="display:none">DRV</div>
+        </div>
+        <div class="team-name">Diego Rodrigues Vieira</div>
+        <div class="team-role">Advogado · Direito Tributário</div>
+        <p class="team-bio">
+          Sócio fundador da Vieira-Rodrigues, advogado especialista em Direito Tributário pela CEU Law School, com trajetória em escritórios de direito internacional e sólida experiência no assessoramento a empresas multinacionais. Atuou junto a clientes como Volvo, General Electric, General Motors e outras líderes globais.
+        </p>
+        <div class="team-tags">
+          <span class="team-tag">Direito Tributário</span>
+          <span class="team-tag">Direito Econômico</span>
+          <span class="team-tag">Direito Constitucional</span>
+        </div>
+        <div class="team-social">
+          <a href="https://www.linkedin.com/in/diego-vieira-rodrigues" target="_blank" rel="noopener noreferrer" class="social-li" aria-label="LinkedIn Diego Rodrigues Vieira">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://www.instagram.com/vieirarodrigues.adv/" target="_blank" rel="noopener noreferrer" class="social-ig" aria-label="Instagram Vieira-Rodrigues Advocacia">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            Instagram
+          </a>
+        </div>
+      </div>
+
+      <!-- Gustavo -->
+      <div class="team-card">
+        <div class="team-photo-wrap">
+          <img src="img/gustavo.jpg" alt="Gustavo Nogueira Martinek"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="team-initials" style="display:none">GNM</div>
+        </div>
+        <div class="team-name">Gustavo Nogueira Martinek</div>
+        <div class="team-role">Advogado · Direito Imobiliário</div>
+        <p class="team-bio">
+          Advogado e coordenador jurídico especializado em Direito Empresarial, Contratos e Direito Imobiliário. Sócio da Martinek Advocacia e coordenador jurídico na Sindona Advogados Associados, em São Paulo. Defensor da transparência contratual e do uso estratégico da tecnologia no direito.
+        </p>
+        <div class="team-tags">
+          <span class="team-tag">Direito Imobiliário</span>
+          <span class="team-tag">Contratos</span>
+          <span class="team-tag">Direito Empresarial</span>
+        </div>
+        <div class="team-social">
+          <a href="https://www.linkedin.com/in/gustavo-martinek/" target="_blank" rel="noopener noreferrer" class="social-li" aria-label="LinkedIn Gustavo Nogueira Martinek">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://www.instagram.com/gustavo.martinek.adv/" target="_blank" rel="noopener noreferrer" class="social-ig" aria-label="Instagram Gustavo Martinek Advocacia">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            Instagram
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" aria-label="Chamada para ação">
+  <h2>Descubra agora quanto você pode economizar ou recuperar</h2>
+  <p>Calculadora gratuita. Resultado imediato. Diagnóstico com especialistas.</p>
+  <a href="#calculadora" class="wa-btn" style="display:inline-flex; font-size:17px; padding:18px 36px;">
+    <svg class="wa-svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    Calcular meu ITBI agora
+  </a>
+  <p class="cta-note">✓ 100% gratuito &nbsp;·&nbsp; ✓ Sem cadastro &nbsp;·&nbsp; ✓ Válido para todo o Brasil</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 ITBI Check &nbsp;·&nbsp; <a href="mailto:contato@itbicheck.com.br">contato@itbicheck.com.br</a></p>
+  <p style="margin-top:6px;">As informações deste site têm caráter informativo e não constituem assessoria jurídica. Consulte sempre um advogado habilitado para o seu caso.</p>
+</footer>
+
+<script>
+// ── Estado ────────────────────────────────────────────────────
+let cenario = 'comprar';
+
+// Mapa de alíquotas por valor do select
+function aplicarAliquota() {
+  const sel = document.getElementById('inputMunicipio');
+  const val = sel.value;
+  const aliqInput = document.getElementById('inputAliq');
+  if (val && val !== 'outro' && val !== '') {
+    aliqInput.value = parseFloat(val).toFixed(1);
+  }
+  if (val === 'outro') {
+    aliqInput.value = '';
+    aliqInput.focus();
+  }
+}
+
+function setCenario(c) {
+  cenario = c;
+  document.getElementById('btnComprar').classList.toggle('active', c === 'comprar');
+  document.getElementById('btnComprei').classList.toggle('active', c === 'comprei');
+  const fieldData = document.getElementById('fieldData');
+  fieldData.style.display = c === 'comprei' ? 'block' : 'none';
+  document.getElementById('resultado').style.display = 'none';
+  document.getElementById('erro').style.display = 'none';
+  document.getElementById('prazoBadge').innerHTML = '';
+  // Ajusta data máxima para hoje
+  if (c === 'comprei') {
+    document.getElementById('inputData').max = new Date().toISOString().split('T')[0];
+  }
+}
+
+// ── Verificação de prazo ──────────────────────────────────────
+function verificarPrazo() {
+  const dataVal = document.getElementById('inputData').value;
+  const badge   = document.getElementById('prazoBadge');
+  if (!dataVal) { badge.innerHTML = ''; return; }
+
+  const compra     = new Date(dataVal);
+  const hoje       = new Date();
+  const limite     = new Date(compra);
+  limite.setFullYear(limite.getFullYear() + 5);
+  const diasRestantes = Math.floor((limite - hoje) / (1000 * 60 * 60 * 24));
+
+  if (diasRestantes < 0) {
+    badge.innerHTML = `<span class="prazo-out">⛔ Prazo esgotado — passaram mais de 5 anos</span>`;
+  } else if (diasRestantes < 180) {
+    const meses = Math.ceil(diasRestantes / 30);
+    badge.innerHTML = `<span class="prazo-warn">⚠️ Atenção: prazo expira em ~${meses} mês${meses>1?'es':''} (${limite.toLocaleDateString('pt-BR')})</span>`;
+  } else {
+    const meses = Math.floor(diasRestantes / 30);
+    badge.innerHTML = `<span class="prazo-ok">✅ Dentro do prazo — ${meses} meses restantes</span>`;
+  }
+}
+
+function getPrazoStatus() {
+  if (cenario !== 'comprei') return 'ok';
+  const dataVal = document.getElementById('inputData').value;
+  if (!dataVal) return 'semdata';
+  const compra = new Date(dataVal);
+  const limite = new Date(compra);
+  limite.setFullYear(limite.getFullYear() + 5);
+  const diasRestantes = Math.floor((limite - new Date()) / (1000 * 60 * 60 * 24));
+  if (diasRestantes < 0) return 'vencido';
+  if (diasRestantes < 180) return 'urgente';
+  return 'ok';
+}
+
+// ── Máscara monetária ─────────────────────────────────────────
+function mascarar(input) {
+  let v = input.value.replace(/\D/g, '');
+  if (v) {
+    v = (parseInt(v, 10) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    input.value = 'R$ ' + v;
+  }
+}
+
+function parseBRL(str) {
+  if (!str) return 0;
+  return parseFloat(str.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+}
+
+function fmt(n) {
+  return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+// ── Cálculo principal ─────────────────────────────────────────
+function calcular() {
+  const vrr   = parseBRL(document.getElementById('inputVVR').value);
+  const venda = parseBRL(document.getElementById('inputVenda').value);
+  const aliq  = parseFloat(document.getElementById('inputAliq').value) / 100 || 0.03;
+
+  document.getElementById('erro').style.display    = 'none';
+  document.getElementById('resultado').style.display = 'none';
+
+  if (!vrr   || vrr   < 1000) return mostrarErro('Informe o Valor Venal do imóvel.');
+  if (!venda || venda < 1000) return mostrarErro('Informe o valor real de venda.');
+  if (!aliq  || aliq  <= 0)  return mostrarErro('Informe a alíquota do ITBI.');
+
+  // Validação de data para "já comprei"
+  if (cenario === 'comprei') {
+    const dataVal = document.getElementById('inputData').value;
+    if (!dataVal) return mostrarErro('Informe a data da compra para verificarmos o prazo de restituição.');
+  }
+
+  const prazoStatus = getPrazoStatus();
+  const itbiCobrado = vrr   * aliq;
+  const itbiCorreto = venda * aliq;
+  const diferenca   = itbiCobrado - itbiCorreto;
+  const temDif      = diferenca > 50;
+
+  // Dados para a mensagem do WhatsApp
+  const dataCompraStr = cenario === 'comprei' ? document.getElementById('inputData').value : '';
+  const municipioEl   = document.getElementById('inputMunicipio');
+  const municipioNome = municipioEl.value && municipioEl.value !== 'outro'
+    ? municipioEl.options[municipioEl.selectedIndex].text
+    : 'Município não informado';
+
+  const situacao = cenario === 'comprar' ? 'Vou comprar um imóvel' : `Já comprei um imóvel (data: ${dataCompraStr ? new Date(dataCompraStr).toLocaleDateString('pt-BR') : 'não informada'})`;
+  const waText = encodeURIComponent(
+    `Oi! Fiz o diagnóstico no ITBI Check.\n\nSituação: ${situacao}\nMunicípio: ${municipioNome}\nValor Venal: ${fmt(vrr)}\nValor de venda: ${fmt(venda)}\nAlíquota: ${(aliq*100).toFixed(1)}%\n\n` +
+    (temDif
+      ? `Diferença identificada: ${fmt(diferenca)}\nQuero saber como ${cenario === 'comprar' ? 'pagar o valor correto' : 'recuperar esse valor'}.`
+      : 'Não identifiquei diferença indevida neste caso, mas gostaria de conversar com um especialista.')
+  );
+  const waLink = `https://wa.me/558391715836?text=${waText}`;
+
+  // Bloco de prazo
+  let prazoHtml = '';
+  if (cenario === 'comprei' && temDif) {
+    if (prazoStatus === 'vencido') {
+      prazoHtml = `<div class="res-prazo-out">⛔ <strong>Prazo encerrado:</strong> passaram mais de 5 anos desde a compra. Infelizmente não é mais possível pedir restituição para este caso específico.</div>`;
+    } else if (prazoStatus === 'urgente') {
+      const dataVal = document.getElementById('inputData').value;
+      const limite  = new Date(dataVal); limite.setFullYear(limite.getFullYear() + 5);
+      prazoHtml = `<div class="res-prazo">⚠️ <strong>Atenção: prazo urgente!</strong> O prazo de 5 anos vence em <strong>${limite.toLocaleDateString('pt-BR')}</strong>. Acione um especialista imediatamente.</div>`;
+    } else {
+      prazoHtml = `<div class="res-prazo">⏰ <strong>Dentro do prazo:</strong> você ainda pode pedir a restituição dos valores pagos a mais. O prazo é de 5 anos a partir do pagamento do ITBI.</div>`;
+    }
+  }
+
+  const html = `
+    <div class="res-grid">
+      <div class="res-box bad">
+        <div class="res-tag bad">Município cobra</div>
+        <div class="res-base">Base: ${fmt(vrr)}</div>
+        <div class="res-val bad">${fmt(itbiCobrado)}</div>
+      </div>
+      <div class="res-box good">
+        <div class="res-tag good">Deveria ser</div>
+        <div class="res-base">Base: ${fmt(venda)}</div>
+        <div class="res-val good">${fmt(itbiCorreto)}</div>
+      </div>
+    </div>
+
+    ${temDif && prazoStatus !== 'vencido' ? `
+      <div class="res-diff">
+        <div class="res-diff-lbl">${cenario === 'comprar' ? 'Você vai pagar a mais:' : 'Você pode recuperar:'}</div>
+        <div class="res-diff-val">${fmt(diferenca)}</div>
+        <div class="res-diff-sub">Com base no STJ Tema 1113 · alíquota ${(aliq*100).toFixed(1)}%</div>
+      </div>
+      ${prazoHtml}
+      <a href="${waLink}" target="_blank" class="wa-btn">
+        <svg class="wa-svg" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.558 4.121 1.533 5.859L.057 23.43a.75.75 0 00.914.914l5.57-1.476A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 01-4.962-1.358l-.356-.211-3.698.98.979-3.697-.211-.357A9.726 9.726 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
+        💬 Falar com especialista agora
+      </a>
+    ` : prazoStatus === 'vencido' && temDif ? `
+      ${prazoHtml}
+      <a href="${waLink}" target="_blank" class="wa-btn" style="background:#6b7280;">
+        Conversar com especialista sobre outros imóveis
+      </a>
+    ` : `
+      <div class="res-ok">✅ O valor de venda é maior que o Valor Venal — sem cobrança indevida neste caso.</div>
+      <a href="${waLink}" target="_blank" class="wa-btn" style="background:#6b7280;">
+        Falar com especialista mesmo assim
+      </a>
+    `}
+  `;
+
+  document.getElementById('resultadoConteudo').innerHTML = html;
+  document.getElementById('resultado').style.display = 'block';
+  document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function mostrarErro(msg) {
+  const el = document.getElementById('erro');
+  el.textContent = '⚠️ ' + msg;
+  el.style.display = 'block';
+}
+
+function toggleFaq(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
